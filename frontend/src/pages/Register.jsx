@@ -10,7 +10,6 @@ const Register = () => {
     mobile: '',
     password: '',
   });
-  const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -26,16 +25,8 @@ const Register = () => {
     setLoading(true);
     setError('');
 
-    const data = new FormData();
-    Object.keys(formData).forEach((key) => {
-      data.append(key, formData[key]);
-    });
-    if (image) {
-      data.append('image', image);
-    }
-
     try {
-      const res = await api.post('/api/register', data);
+      const res = await api.post('/api/register', formData);
       if (res.data.success) {
         alert('Registration Successful! Please check your email for verification.');
         navigate('/login', {
@@ -120,18 +111,6 @@ const Register = () => {
                 onChange={handleChange}
                 required
                 className="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 transition-all"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Profile Picture <span className="text-gray-500">(Optional)</span>
-              </label>
-              <input
-                type="file"
-                accept="image/jpeg,image/png"
-                onChange={(e) => setImage(e.target.files?.[0] || null)}
-                className="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-2xl text-white file:mr-4 file:py-2 file:px-6 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white"
               />
             </div>
 
