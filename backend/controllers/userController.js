@@ -38,7 +38,7 @@ const userRegister = async (req, res) => {
 
         const userData = await user.save();
 
-       const msg = `<p>Hi ${userData.name}, Please <a href="${process.env.CLIENT_URL}/mail-verification?id=${userData._id}">verify</a> your email.</p>`;const msg = `<p>Hi ${name}, Please <a href="${process.env.CLIENT_URL}/mail-verification?id=${userData._id}">verify</a> your email.</p>`;
+       const msg = `<p>Hi ${name}, Please <a href="https://blog-vista-jwt-auth.vercel.app/mail-verification?id=${userData._id}">Verify Email</a></p>`;
 
         await mailer.sendMail(email, 'Mail Verification', msg);
 
@@ -87,7 +87,7 @@ const sendMailVerification = async (req, res) => {
             });
         }
 
-       const msg = `<p>Hi ${userData.name}, Please <a href="${process.env.CLIENT_URL}/mail-verification?id=${userData._id}">verify</a> your email.</p>`;
+       const msg = `<p>Hi ${userData.name}, Please <a href="https://blog-vista-jwt-auth.vercel.app/mail-verification?id=${userData._id}">Verify Email</a></p>`;
 
         await mailer.sendMail(userData.email, 'Mail Verification', msg);
 
@@ -113,22 +113,17 @@ const mailVerification = async (req, res) => {
         }
 
         const userData = await User.findOne({ _id: req.query.id });
+if (userData) {
+    if (userData.is_verified == 1) {
+        return res.redirect('https://blog-vista-jwt-auth-uzzu.vercel.app/login');
+    }
 
-        if (userData) {
-            if (userData.is_verified == 1) {
-                if (userData.is_verified == 1) {
-                    return res.redirect('http://localhost:5173/login');
-                }
-            }
+    await User.findByIdAndUpdate(req.query.id, {
+        $set: { is_verified: 1 }
+    });
 
-            await User.findByIdAndUpdate(req.query.id, {
-                $set: { is_verified: 1 }
-            });
-
-            return res.redirect('http://localhost:5173/login');
-        } else {
-            return res.render('mail-verification', { message: 'User Not Found' });
-        }
+    return res.redirect('https://blog-vista-jwt-auth-uzzu.vercel.app/login');
+}
     } catch (error) {
         console.error(error.message);
         return res.render('404');
