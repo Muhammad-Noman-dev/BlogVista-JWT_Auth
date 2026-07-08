@@ -38,7 +38,7 @@ const userRegister = async (req, res) => {
 
         const userData = await user.save();
 
-        const msg = `<p>Hi ${name}, Please <a href="http://127.0.0.1:3000/mail-verification?id=${userData._id}">verify</a> your email.</p>`;
+       const msg = `<p>Hi ${userData.name}, Please <a href="${process.env.CLIENT_URL}/mail-verification?id=${userData._id}">verify</a> your email.</p>`;const msg = `<p>Hi ${name}, Please <a href="${process.env.CLIENT_URL}/mail-verification?id=${userData._id}">verify</a> your email.</p>`;
 
         await mailer.sendMail(email, 'Mail Verification', msg);
 
@@ -87,7 +87,7 @@ const sendMailVerification = async (req, res) => {
             });
         }
 
-        const msg = `<p>Hi ${userData.name}, Please <a href="http://127.0.0.1:3000/mail-verification?id=${userData._id}">verify</a> your email.</p>`;
+       const msg = `<p>Hi ${userData.name}, Please <a href="${process.env.CLIENT_URL}/mail-verification?id=${userData._id}">verify</a> your email.</p>`;
 
         await mailer.sendMail(userData.email, 'Mail Verification', msg);
 
