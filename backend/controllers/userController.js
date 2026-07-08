@@ -1,4 +1,3 @@
-// backend/controllers/userController.js
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const { validationResult } = require('express-validator')
@@ -41,7 +40,7 @@ const userRegister = async (req, res) => {
 
         const msg = `<p>Hi ${name}, Please <a href="http://127.0.0.1:3000/mail-verification?id=${userData._id}">verify</a> your email.</p>`;
 
-        mailer.sendMail(email, 'Mail Verification', msg);
+        await mailer.sendMail(email, 'Mail Verification', msg);
 
         return res.status(200).json({
             success: true,
@@ -121,10 +120,6 @@ const mailVerification = async (req, res) => {
                     return res.redirect('http://localhost:5173/login');
                 }
             }
-
-            await User.findByIdAndUpdate(req.query.id, {
-                $set: { is_verified: 1 }
-            });
 
             await User.findByIdAndUpdate(req.query.id, {
                 $set: { is_verified: 1 }
